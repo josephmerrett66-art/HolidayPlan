@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Engawa · Joe &amp; Beth · Japan 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    darkMode:"class",
+    theme:{extend:{
+      colors:{
+        "on-tertiary-container":"#654142","on-surface-variant":"#5c605a","secondary-fixed-dim":"#ffca98",
+        "secondary-fixed":"#ffdcbd","surface-container-high":"#e7e9e2","tertiary":"#7c5556",
+        "tertiary-fixed":"#fecbcb","on-primary":"#faf7f6","surface-container":"#edeee8",
+        "surface-container-lowest":"#ffffff","background":"#faf9f5","primary":"#5f5e5e",
+        "primary-fixed":"#e4e2e1","secondary-container":"#ffdcbd","on-primary-container":"#525151",
+        "surface":"#faf9f5","primary-fixed-dim":"#d6d4d3","surface-container-low":"#f4f4ef",
+        "primary-container":"#e4e2e1","secondary":"#7e572e","secondary-dim":"#704b23",
+        "surface-dim":"#d7dcd2","on-secondary-container":"#6f4a22","on-background":"#2f342e",
+        "surface-variant":"#e0e4db","on-surface":"#2f342e","tertiary-container":"#fecbcb",
+        "surface-container-highest":"#e0e4db","on-secondary":"#fff7f4","tertiary-dim":"#6e494a",
+        "on-tertiary":"#fff7f6","outline-variant":"#afb3ac","tertiary-fixed-dim":"#efbdbd",
+        "primary-dim":"#535252","outline":"#787c75"
+      },
+      fontFamily:{"headline":["Manrope"],"body":["Inter"],"label":["Inter"]},
+      borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"}
+    }}
+  }
+</script>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;vertical-align:middle;}
+  body{background-color:#faf9f5;-webkit-font-smoothing:antialiased;min-height:100dvh;}
+  .page{display:none;opacity:0;transform:translateY(5px);transition:opacity .22s ease,transform .22s ease;}
+  .page.active{display:block;opacity:1;transform:translateY(0);}
+  @keyframes grow-h{from{width:0}to{width:var(--w)}}
+  .bar{animation:grow-h 1.1s cubic-bezier(.34,1.56,.64,1) forwards;}
+  .modal-overlay{background:rgba(0,0,0,.45);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .28s ease;}
+  .modal-overlay.open{opacity:1;pointer-events:auto;}
+  .modal-sheet{transform:translateY(100%);transition:transform .38s cubic-bezier(.32,.72,0,1);}
+  .modal-overlay.open .modal-sheet{transform:translateY(0);}
+  .expandable{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1);}
+  .expanded .expandable{max-height:700px;}
+  .expanded .exp-chevron{transform:rotate(180deg);}
+  .exp-chevron{transition:transform .28s ease;}
+  .done{opacity:.4;}
+  .card-press{transition:transform .18s ease;}
+  .card-press:active{transform:scale(.98);}
+  .pill-active{background:#ffdcbd !important;border-color:#7e572e !important;color:#6f4a22 !important;}
+  ::-webkit-scrollbar{width:0;height:0;}
+</style>
+</head>
+<body class="font-body text-on-surface overflow-x-hidden">
+
+<!-- TOP BAR -->
+<header class="fixed top-0 w-full z-50 bg-[#faf9f5]/92 backdrop-blur-xl border-b border-[#afb3ac]/20 flex justify-between items-center px-6 h-16">
+  <div class="flex items-center gap-4">
+    <span class="material-symbols-outlined cursor-pointer hover:opacity-70 transition-opacity" onclick="toggleDrawer()">menu</span>
+    <h1 class="font-headline font-light tracking-[0.15em] text-[#2f342e] uppercase text-sm" id="page-title">Engawa</h1>
+  </div>
+  <div class="flex items-center gap-3">
+    <span class="font-label tracking-widest uppercase text-[10px] text-[#2f342e]/50">Joe &amp; Beth · Japan 2026</span>
+    <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center">
+      <span class="material-symbols-outlined text-secondary" style="font-size:16px">person</span>
+    </div>
+  </div>
+</header>
+
+<!-- DRAWER -->
+<aside class="fixed inset-y-0 left-0 w-72 bg-[#edeee8] shadow-2xl shadow-black/10 -translate-x-full transition-transform duration-300 z-[60]" id="nav-drawer">
+  <div class="flex flex-col p-8 h-full pt-12">
+    <div class="flex items-center gap-4 mb-8">
+      <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-secondary">travel_explore</span>
+      </div>
+      <div><p class="font-headline font-bold">Joe &amp; Beth</p><p class="text-xs text-on-surface-variant">Spring Japan 2026 · 16 days</p></div>
+    </div>
+    <nav class="space-y-1">
+      <div class="flex items-center gap-4 p-3 bg-[#faf9f5] text-secondary rounded-lg cursor-pointer font-medium" onclick="goto('home');toggleDrawer()"><span class="material-symbols-outlined">calendar_today</span><span class="text-sm">Home</span></div>
+      <div class="flex items-center gap-4 p-3 text-on-surface/70 hover:bg-[#faf9f5]/60 rounded-lg cursor-pointer" onclick="goto('itinerary');toggleDrawer()"><span class="material-symbols-outlined">map</span><span class="text-sm">Full Itinerary</span></div>
+      <div class="flex items-center gap-4 p-3 text-on-surface/70 hover:bg-[#faf9f5]/60 rounded-lg cursor-pointer" onclick="goto('day');toggleDrawer()"><span class="material-symbols-outlined">wb_sunny</span><span class="text-sm">Day Detail</span></div>
+      <div class="flex items-center gap-4 p-3 text-on-surface/70 hover:bg-[#faf9f5]/60 rounded-lg cursor-pointer" onclick="goto('finance');toggleDrawer()"><span class="material-symbols-outlined">payments</span><span class="text-sm">Finances</span></div>
+      <div class="flex items-center gap-4 p-3 text-on-surface/70 hover:bg-[#faf9f5]/60 rounded-lg cursor-pointer" onclick="goto('ai');toggleDrawer()"><span class="material-symbols-outlined">smart_toy</span><span class="text-sm">AI Builder</span></div>
+    </nav>
+    <div class="mt-auto pt-6 border-t border-outline-variant/20">
+      <p class="font-label text-[10px] uppercase tracking-widest text-secondary mb-3">Budget Snapshot</p>
+      <div id="drawer-budget" class="space-y-2 text-sm"></div>
+    </div>
+  </div>
+</aside>
+<div class="fixed inset-0 bg-black/20 z-[55] hidden" id="drawer-bg" onclick="toggleDrawer()"></div>
+
+<!-- PAGES -->
+<main class="pt-16 pb-24">
+
+  <!-- HOME -->
+  <div class="page active px-5 max-w-screen-xl mx-auto pt-8" id="page-home">
+    <div class="mb-8">
+      <span class="font-label text-xs uppercase tracking-[0.2em] text-secondary mb-2 block">Spring 2026 · 16 Days</span>
+      <h2 class="font-headline text-4xl font-extrabold tracking-tighter">Japan.</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+      <div class="bg-surface-container-low rounded-xl p-4 text-center"><p class="font-headline text-2xl font-bold text-secondary">16</p><p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-1">Days</p></div>
+      <div class="bg-surface-container-low rounded-xl p-4 text-center"><p class="font-headline text-2xl font-bold text-secondary">5</p><p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-1">Cities</p></div>
+      <div class="bg-surface-container-low rounded-xl p-4 text-center"><p class="font-headline text-2xl font-bold text-secondary" id="stat-cost">–</p><p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-1">Est. AUD</p></div>
+      <div class="bg-surface-container-low rounded-xl p-4 text-center"><p class="font-headline text-2xl font-bold text-secondary" id="stat-booked">–</p><p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-1">Booked</p></div>
+    </div>
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-headline text-base font-semibold">Select Day</h3>
+      <span class="font-label text-[10px] text-secondary uppercase tracking-widest">Tap to preview</span>
+    </div>
+    <div class="flex gap-2 overflow-x-auto pb-2 mb-8" id="home-pills"></div>
+    <div class="bg-surface-container-lowest rounded-xl p-6 md:p-8 border border-outline-variant/10 shadow-sm" id="home-card">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-7">
+        <div>
+          <span class="font-label text-xs text-secondary font-medium block mb-1" id="hc-label">Day 0</span>
+          <h3 class="font-headline text-4xl font-extrabold tracking-tighter" id="hc-city">—</h3>
+          <div class="flex flex-wrap gap-3 mt-3" id="hc-meta"></div>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          <button class="bg-primary text-on-primary px-5 py-2.5 rounded-lg font-label text-xs font-bold hover:bg-primary-dim active:scale-95 transition-all uppercase tracking-wider" onclick="goto('day')">View Full Day</button>
+          <button class="bg-surface-container text-on-surface px-5 py-2.5 rounded-lg font-label text-xs font-bold hover:bg-surface-container-high active:scale-95 transition-all uppercase tracking-wider" onclick="goto('itinerary')">Full Trip</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="hc-grid"></div>
+    </div>
+  </div>
+
+  <!-- ITINERARY -->
+  <div class="page px-5 max-w-4xl mx-auto pt-8" id="page-itinerary">
+    <div class="mb-10">
+      <span class="font-label text-xs uppercase tracking-widest text-secondary font-semibold block mb-1">Melbourne → Tokyo → Osaka → Melbourne</span>
+      <h2 class="font-headline text-4xl font-light tracking-tight">Full Itinerary</h2>
+      <div class="h-1 w-16 bg-secondary/20 rounded-full mt-3"></div>
+    </div>
+    <div class="space-y-8" id="itin-list"></div>
+  </div>
+
+  <!-- DAY DETAIL -->
+  <div class="page px-5 max-w-5xl mx-auto pt-8" id="page-day">
+    <div class="flex gap-2 overflow-x-auto pb-2 mb-6" id="day-tabs"></div>
+    <div id="day-content"></div>
+  </div>
+
+  <!-- FINANCE -->
+  <div class="page px-5 max-w-5xl mx-auto pt-8" id="page-finance">
+    <div class="mb-10">
+      <p class="font-label text-[10px] uppercase tracking-widest text-secondary mb-2">Total Estimated Cost</p>
+      <div class="flex flex-col md:flex-row md:items-baseline gap-4">
+        <h2 class="font-headline text-6xl md:text-8xl font-extralight tracking-tighter" id="fin-total">$–</h2>
+        <span class="font-headline text-xl text-outline-variant" id="fin-sub">AUD estimated</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-10">
+      <div class="md:col-span-7 bg-surface-container-low p-8 rounded-xl">
+        <h3 class="font-label text-[10px] uppercase tracking-widest text-secondary mb-8">Contributions</h3>
+        <div class="space-y-8" id="fin-contribs"></div>
+      </div>
+      <div class="md:col-span-5 bg-surface-container p-8 rounded-xl flex flex-col">
+        <h3 class="font-label text-[10px] uppercase tracking-widest text-secondary mb-6">Settlement &amp; Status</h3>
+        <div id="fin-settle" class="text-center py-4 flex-grow"></div>
+        <div id="fin-status" class="mt-4 space-y-2 text-sm border-t border-outline-variant/20 pt-4"></div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10" id="fin-cats"></div>
+    <div class="flex justify-between items-end mb-6">
+      <h3 class="font-label text-[10px] uppercase tracking-widest text-secondary">Day-by-Day Ledger</h3>
+      <button class="text-secondary font-label text-[10px] uppercase tracking-widest flex items-center gap-2 hover:opacity-70" onclick="dlCSV()">Export CSV <span class="material-symbols-outlined text-sm">download</span></button>
+    </div>
+    <div id="fin-ledger"></div>
+  </div>
+
+  <!-- AI -->
+  <div class="page px-5 max-w-4xl mx-auto pt-8" id="page-ai">
+    <div class="mb-10"><h2 class="font-headline text-4xl font-extralight tracking-tight mb-2">Prompt Builder</h2><div class="h-px w-12 bg-secondary opacity-30"></div></div>
+    <div class="bg-surface-container-low rounded-xl p-8 border-l-2 border-secondary mb-10 relative overflow-hidden">
+      <div class="absolute top-0 right-0 opacity-5 pointer-events-none"><span class="material-symbols-outlined text-[120px]">storm</span></div>
+      <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="max-w-md">
+          <p class="font-label text-sm uppercase tracking-widest text-secondary mb-2">How it works</p>
+          <p class="text-on-surface-variant text-sm leading-relaxed">Click Export to copy your live trip JSON, then paste it into any AI alongside one of the prompts below.</p>
+        </div>
+        <button class="bg-primary hover:bg-primary-dim text-on-primary px-5 py-3 rounded-xl text-sm font-medium flex items-center gap-2 active:scale-95 transition-all flex-shrink-0" onclick="cpJSON()">
+          <span class="material-symbols-outlined text-sm">upload_file</span>Export Trip JSON
+        </button>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="group bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-6 hover:shadow-xl transition-all duration-500 flex flex-col justify-between">
+        <div><div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center mb-4 text-secondary"><span class="material-symbols-outlined">calendar_today</span></div>
+        <h3 class="font-headline text-xl mb-2 font-medium">Fill Empty Days</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">Suggests culturally relevant activities for your unplanned slots across all cities.</p></div>
+        <button class="cpbtn w-full flex items-center justify-center gap-2 py-3 bg-surface-container-high group-hover:bg-tertiary-container group-hover:text-on-tertiary-container font-medium text-xs tracking-wider uppercase rounded-lg transition-colors" onclick="cpPrompt(this,'fill')"><span class="material-symbols-outlined text-sm">content_copy</span>Copy Prompt</button>
+      </div>
+      <div class="group bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-6 hover:shadow-xl transition-all duration-500 flex flex-col justify-between">
+        <div><div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center mb-4 text-secondary"><span class="material-symbols-outlined">payments</span></div>
+        <h3 class="font-headline text-xl mb-2 font-medium">Estimate Costs</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">Fills missing AUD prices across your itinerary using current 2026 rates.</p></div>
+        <button class="cpbtn w-full flex items-center justify-center gap-2 py-3 bg-surface-container-high group-hover:bg-tertiary-container group-hover:text-on-tertiary-container font-medium text-xs tracking-wider uppercase rounded-lg transition-colors" onclick="cpPrompt(this,'costs')"><span class="material-symbols-outlined text-sm">content_copy</span>Copy Prompt</button>
+      </div>
+      <div class="group bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-6 hover:shadow-xl transition-all duration-500 flex flex-col justify-between">
+        <div><div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center mb-4 text-secondary"><span class="material-symbols-outlined">train</span></div>
+        <h3 class="font-headline text-xl mb-2 font-medium">Add Transport Links</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">Maps transit connections between destinations with timing, platform info and booking links.</p></div>
+        <button class="cpbtn w-full flex items-center justify-center gap-2 py-3 bg-surface-container-high group-hover:bg-tertiary-container group-hover:text-on-tertiary-container font-medium text-xs tracking-wider uppercase rounded-lg transition-colors" onclick="cpPrompt(this,'transport')"><span class="material-symbols-outlined text-sm">content_copy</span>Copy Prompt</button>
+      </div>
+      <div class="group bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-6 hover:shadow-xl transition-all duration-500 flex flex-col justify-between">
+        <div><div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center mb-4 text-secondary"><span class="material-symbols-outlined">edit_note</span></div>
+        <h3 class="font-headline text-xl mb-2 font-medium">Custom Prompt</h3>
+        <textarea id="cpt" class="w-full bg-surface-container-high border-none rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary/30 min-h-[80px] resize-none mb-4" placeholder="e.g. 'Find best ramen near each hotel...'"></textarea></div>
+        <button class="cpbtn w-full flex items-center justify-center gap-2 py-3 bg-surface-container-high group-hover:bg-tertiary-container group-hover:text-on-tertiary-container font-medium text-xs tracking-wider uppercase rounded-lg transition-colors" onclick="cpPrompt(this,'custom')"><span class="material-symbols-outlined text-sm">auto_awesome</span>Generate Custom</button>
+      </div>
+    </div>
+    <div class="mt-16 flex flex-col items-center pb-4">
+      <div class="w-16 h-16 rounded-full border border-outline-variant/20 flex items-center justify-center mb-4"><span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1">spa</span></div>
+      <p class="font-headline text-sm tracking-[0.3em] uppercase opacity-30">The Digital Engawa</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="fixed bottom-0 w-full z-50 bg-[#faf9f5]/92 backdrop-blur-xl border-t border-[#afb3ac]/10 shadow-[0_-4px_24px_rgba(0,0,0,0.02)]">
+  <div class="flex justify-around items-center h-20 px-4 w-full max-w-lg mx-auto">
+    <button class="navbtn flex flex-col items-center justify-center px-3 py-1 rounded-xl transition-all duration-300 w-14" data-t="home" onclick="goto('home')"><span class="material-symbols-outlined mb-1 ni">calendar_today</span><span class="font-label text-[10px] font-medium">Home</span></button>
+    <button class="navbtn flex flex-col items-center justify-center px-3 py-1 rounded-xl transition-all duration-300 w-14" data-t="itinerary" onclick="goto('itinerary')"><span class="material-symbols-outlined mb-1 ni">map</span><span class="font-label text-[10px] font-medium">Itinerary</span></button>
+    <button class="navbtn flex flex-col items-center justify-center px-3 py-1 rounded-xl transition-all duration-300 w-14" data-t="day" onclick="goto('day')"><span class="material-symbols-outlined mb-1 ni">wb_sunny</span><span class="font-label text-[10px] font-medium">Day</span></button>
+    <button class="navbtn flex flex-col items-center justify-center px-3 py-1 rounded-xl transition-all duration-300 w-14" data-t="finance" onclick="goto('finance')"><span class="material-symbols-outlined mb-1 ni">payments</span><span class="font-label text-[10px] font-medium">Finance</span></button>
+    <button class="navbtn flex flex-col items-center justify-center px-3 py-1 rounded-xl transition-all duration-300 w-14" data-t="ai" onclick="goto('ai')"><span class="material-symbols-outlined mb-1 ni">smart_toy</span><span class="font-label text-[10px] font-medium">AI</span></button>
+  </div>
+</nav>
+
+<!-- MODAL -->
+<div class="modal-overlay fixed inset-0 z-[60] flex items-end md:items-center justify-center p-0 md:p-6" id="modal" onclick="closeModal()">
+  <div class="modal-sheet w-full md:max-w-lg bg-surface-container-lowest rounded-t-3xl md:rounded-3xl overflow-y-auto max-h-[88vh] shadow-2xl" onclick="event.stopPropagation()" id="modal-inner"></div>
+</div>
+
+<!-- TOAST -->
+<div class="fixed bottom-28 left-1/2 -translate-x-1/2 z-[80] bg-[#2f342e] text-[#faf9f5] px-5 py-2.5 rounded-full text-sm font-medium opacity-0 pointer-events-none transition-all duration-300 whitespace-nowrap shadow-xl" id="toast"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────
+const T={days:[{index:0,city:"MELBOURNE → JAPAN",entries:[{id:"jy85wzbf3q",category:"transport",name:"Flight JQ34 – JQ25",price:"1174",joePaid:true,bethPaid:true,notes:"Overnight Jetstar international via Cairns. Recheck terminal and baggage rules 24 hours before departure.",insight:"Transport leg. Double-check departure terminal the night before.",startTime:"21:00",endTime:"08:00",durationMinutes:"660",address:"Terminal 2, Melbourne Airport, Melbourne VIC 3045, Australia",googleMaps:"https://www.google.com/maps/search/?api=1&query=Melbourne%20Airport%20T2",website:"https://www.jetstar.com/",bookingLink:"https://www.jetstar.com/",status:"booked",bestTimeToVisit:"Arrive 3 hours early",actualPrice:"1174",tags:"flight,international,transport"},{id:"5rtcauyqroy",category:"accommodation",name:"Hotel Keihan Asakusa",price:"574",joePaid:false,bethPaid:false,notes:"2-minute walk from Tsukuba Express Asakusa Station. Luggage storage available.",insight:"Good base for Senso-ji and eastern Tokyo.",startTime:"15:00",endTime:"11:00",durationMinutes:"1200",address:"2-12-4 Asakusa, Taito City, Tokyo 111-0032, Japan",googleMaps:"https://www.google.com/maps/search/?api=1&query=Hotel%20Keihan%20Asakusa",website:"https://asakusa.hotelkeihan.co.jp/",bookingLink:"https://asakusa.hotelkeihan.co.jp/",status:"booked",bestTimeToVisit:"Check-in from 15:00",actualPrice:"574",tags:"hotel,asakusa,tokyo"}]},{index:1,city:"TOKYO",entries:[{id:"tok1act002",category:"activity",name:"Explore Shinjuku & Kabukicho Tower",price:"15",joePaid:false,bethPaid:false,notes:"Tokyu Kabukicho Tower open 24 hours. Good first-night orientation walk.",insight:"Late afternoon into evening.",startTime:"16:00",endTime:"18:30",address:"Kabukicho, Shinjuku City, Tokyo",googleMaps:"https://www.google.com/maps/search/?api=1&query=Kabukicho%20Tower%20Tokyo",website:"https://www.tokyu-kabukicho-tower.jp/",status:"planned",tags:"walk,nightlife,shinjuku"},{id:"tok1act003",category:"activity",name:"Omoide Yokocho Dinner Alley",price:"50",joePaid:false,bethPaid:false,notes:"Historic postwar drinking alley – yakitori, beer, atmospheric photos.",insight:"Dinner slot.",startTime:"19:00",endTime:"21:00",address:"Nishi-Shinjuku, Tokyo",googleMaps:"https://www.google.com/maps/search/?api=1&query=Omoide%20Yokocho%20Tokyo",website:"https://en.shinjuku-omoide.com/",status:"planned",tags:"food,nightlife,yakitori"}]},{index:2,city:"TOKYO",entries:[{id:"aik75rswli",category:"activity",name:"teamLab Planets TOKYO",price:"97",joePaid:true,bethPaid:true,notes:"Booking: GYGWZAZ99Y8M. Timed entry, barefoot. Arrive a little early.",insight:"Morning timed entry.",startTime:"10:00",endTime:"12:00",address:"6 Chome-1-16 Toyosu, Koto City, Tokyo",googleMaps:"https://www.google.com/maps/search/?api=1&query=teamLab%20Planets%20TOKYO",website:"https://www.teamlab.art/e/planets/",bookingLink:"https://teamlabplanets.dmm.com/en/",status:"booked",actualPrice:"97",bestTimeToVisit:"Morning timed entry",tags:"immersive,art,museum"},{id:"tok2act004",category:"activity",name:"Toyosu Market Street Food",price:"40",joePaid:false,bethPaid:false,notes:"Best paired with TeamLab. Go earlier in the day.",insight:"Late morning to lunch.",startTime:"12:15",endTime:"13:45",address:"Toyosu, Koto City, Tokyo",googleMaps:"https://www.google.com/maps/search/?api=1&query=Toyosu%20Market%20Tokyo",website:"https://www.toyosu-market.or.jp/en/",status:"planned",tags:"food,market,sushi"},{id:"tok2act005",category:"activity",name:"Tokyo Skytree Observation Deck",price:"45",joePaid:false,bethPaid:false,notes:"Best sunset view of Tokyo skyline.",insight:"Sunset slot.",startTime:"17:00",endTime:"19:00",address:"Oshiage, Sumida City, Tokyo",googleMaps:"https://www.google.com/maps/search/?api=1&query=Tokyo%20Skytree",website:"https://www.tokyo-skytree.jp/en/",bookingLink:"https://www.tokyo-skytree.jp/en/ticket/",status:"planned",tags:"viewpoint,sunset"}]},{index:3,city:"TOKYO",entries:[{id:"cwrxskyud7q",category:"activity",name:"Round 1 Arcade Shibuya",price:"30",joePaid:false,bethPaid:false,notes:"",insight:"Afternoon or evening.",startTime:"13:00",endTime:"15:00",address:"Udagawacho, Shibuya City, Tokyo",googleMaps:"https://www.google.com/maps/search/?api=1&query=Round1%20Stadium%20Shibuya",website:"https://www.round1.co.jp/shop/tenpo/tokyo-shibuya.html",status:"planned",tags:"arcade,games"},{id:"tok3act006",category:"activity",name:"Shibuya Crossing & Hachiko Statue",price:"12",joePaid:false,bethPaid:false,notes:"Iconic crossing. Best viewed from Shibuya Sky or Starbucks.",insight:"Late afternoon or after dark.",startTime:"15:30",endTime:"16:30",address:"Dogenzaka, Shibuya City, Tokyo",googleMaps:"https://www.google.com/maps/search/?api=1&query=Shibuya%20Scramble%20Crossing",website:"https://www.gotokyo.org/en/spot/44/index.html",status:"planned",tags:"landmark,photo"},{id:"tok3act007",category:"activity",name:"Harajuku & Takeshita Street",price:"30",joePaid:false,bethPaid:false,notes:"Street snacks, quirky fashion, crepes.",insight:"Afternoon.",startTime:"17:00",endTime:"19:00",address:"Jingumae, Shibuya City, Tokyo",googleMaps:"https://www.google.com/maps/search/?api=1&query=Takeshita%20Street%20Harajuku",website:"https://www.gotokyo.org/en/spot/22/index.html",status:"planned",tags:"shopping,street-food"}]},{index:4,city:"TOKYO → LAKE KAWAGUCHI",entries:[{id:"tok4trn008",category:"transport",name:"Fuji Excursion Train",price:"90",joePaid:false,bethPaid:false,notes:"Direct from Shinjuku to Kawaguchiko.",insight:"Transport leg.",startTime:"09:30",endTime:"11:30",address:"Shinjuku Station to Kawaguchiko Station",googleMaps:"https://www.google.com/maps/search/?api=1&query=Shinjuku%20Station%20Tokyo",website:"https://e.fujikyu-railway.jp/fujikaiyuu/",bookingLink:"https://e.fujikyu-railway.jp/topics/info4.php",status:"planned",tags:"train,mt-fuji"},{id:"p7zp5jfogh",category:"accommodation",name:"Kawaguchiko Lakeside Hotel",price:"576",joePaid:false,bethPaid:false,notes:"Lakeside near Kawaguchiko Ohashi Bridge. Clear mornings best for Fuji views.",insight:"Confirm check-in window.",startTime:"15:00",endTime:"10:00",address:"1226 Kodachi, Fujikawaguchiko, Yamanashi 401-0302",googleMaps:"https://www.google.com/maps/search/?api=1&query=Kawaguchiko%20Lakeside%20Hotel",website:"https://www.booking.com/hotel/jp/kawaguchiko-lakeside.html",status:"reserved-unpaid",rating:"4.5",tags:"hotel,kawaguchi,fuji-view"},{id:"tok4act009",category:"activity",name:"Lake Kawaguchi Sunset Walk",price:"5",joePaid:false,bethPaid:false,notes:"Amazing Mt Fuji views if weather is clear.",insight:"Sunset on a clear day.",startTime:"17:30",endTime:"19:00",address:"Lake Kawaguchi, Fujikawaguchiko, Yamanashi",googleMaps:"https://www.google.com/maps/search/?api=1&query=Lake%20Kawaguchiko%20North%20Shore",status:"planned",tags:"walk,sunset,fuji-view"}]},{index:5,city:"LAKE KAWAGUCHI",entries:[{id:"bxi0t5et4la",category:"activity",name:"Kachi Kachi Ropeway",price:"15",joePaid:false,bethPaid:false,notes:"",insight:"Morning.",startTime:"09:30",endTime:"11:00",address:"1163-1 Asakawa, Fujikawaguchiko, Yamanashi",googleMaps:"https://www.google.com/maps/search/?api=1&query=Mt.%20Fuji%20Panoramic%20Ropeway",website:"https://www.mtfujiropeway.jp/en/",status:"planned",tags:"ropeway,viewpoint,fuji"},{id:"kawa5act010",category:"activity",name:"Lake Kawaguchi Bike Rental",price:"25",joePaid:false,bethPaid:false,notes:"Easiest loop is the flatter lakeside section.",insight:"Late morning.",startTime:"11:30",endTime:"14:00",address:"Kawaguchiko Station area, Yamanashi",googleMaps:"https://www.google.com/maps/search/?api=1&query=Kawaguchiko%20Station%20bicycle%20rental",status:"planned",tags:"cycling,outdoors,fuji"},{id:"kawa5act011",category:"activity",name:"Fujiyama Onsen Bath",price:"35",joePaid:false,bethPaid:false,notes:"Large onsen complex near Fuji-Q Highland. ~1,500 JPY weekdays.",insight:"Evening.",startTime:"17:00",endTime:"18:30",address:"4-17-1 Shin-Nishihara, Fujiyoshida, Yamanashi",googleMaps:"https://www.google.com/maps/search/?api=1&query=Fujiyama%20Onsen",website:"https://www.fujiyamaonsen.jp/en/",status:"planned",tags:"onsen,relaxation,hot-spring"}]},{index:6,city:"LAKE KAWAGUCHI → SHIZUOKA",entries:[{id:"kawa6trn012",category:"transport",name:"Bus + Train to Shizuoka",price:"65",joePaid:false,bethPaid:false,notes:"Scenic Fuji route via Mishima.",insight:"Transport leg.",startTime:"09:30",endTime:"12:30",address:"Kawaguchiko Station → Mishima → Shizuoka Station",googleMaps:"https://www.google.com/maps/search/?api=1&query=Kawaguchiko%20Station",website:"https://www.japanbusonline.com/en/CourseSearch/11900040002",status:"planned",tags:"bus,train,transport"},{id:"ebmknsj3rnk",category:"accommodation",name:"Hotel Associa Shizuoka",price:"450",joePaid:false,bethPaid:false,notes:"Directly by JR Shizuoka Station. Good luggage-drop option.",insight:"1-min walk from JR Shizuoka Station.",startTime:"14:00",endTime:"11:00",address:"56 Kurogane-cho, Aoi-ku, Shizuoka 420-0851",googleMaps:"https://www.google.com/maps/search/?api=1&query=Hotel%20Associa%20Shizuoka",website:"https://www.associa.com/sth/multi-lingual/?wovn=en",status:"reserved-unpaid",rating:"4.5",tags:"hotel,shizuoka,station"}]},{index:7,city:"SHIZUOKA",entries:[{id:"i3ir9hwdljj",category:"activity",name:"Nihondaira Plateau",price:"22",joePaid:false,bethPaid:false,notes:"",insight:"Morning or clear afternoon.",startTime:"10:00",endTime:"12:00",address:"Nihondaira, Shimizu Ward, Shizuoka",googleMaps:"https://www.google.com/maps/search/?api=1&query=Nihondaira%20Plateau",website:"https://www.visit-shizuoka.com/en/",status:"planned",tags:"viewpoint,fuji-view,nature"},{id:"hjk6fs3kqmr",category:"activity",name:"Visit Tea Farm",price:"20",joePaid:false,bethPaid:false,notes:"",insight:"Afternoon.",startTime:"13:30",endTime:"16:00",address:"Shizuoka Prefecture tea farm",googleMaps:"https://www.google.com/maps/search/?api=1&query=Tea%20farm%20Shizuoka",website:"https://www.visit-shizuoka.com/en/",status:"planned",tags:"tea,culture,scenic"},{id:"vn7cpyg8qja",category:"activity",name:"Miho no Matsubara",price:"8",joePaid:false,bethPaid:false,notes:"",insight:"Late afternoon on a clear day.",startTime:"16:30",endTime:"18:00",address:"Miho, Shimizu Ward, Shizuoka",googleMaps:"https://www.google.com/maps/search/?api=1&query=Miho%20no%20Matsubara",website:"https://miho-no-matsubara.jp/lang/en/",status:"planned",tags:"coastline,fuji-view,world-heritage"},{id:"hierzy6hbuj",category:"activity",name:"Aoba Oden Alley Dinner",price:"35",joePaid:false,bethPaid:false,notes:"",insight:"Dinner.",startTime:"18:00",endTime:"20:00",address:"Aoba Yokocho, Aoi Ward, Shizuoka",googleMaps:"https://www.google.com/maps/search/?api=1&query=Aoba%20Oden%20Alley%20Shizuoka",status:"planned",tags:"food,local-specialty,night"}]},{index:8,city:"SHIZUOKA → KYOTO",entries:[{id:"shiz8trn013",category:"transport",name:"Shinkansen to Kyoto",price:"120",joePaid:false,bethPaid:false,notes:"Approx 1.5 hour trip.",insight:"Transport leg.",startTime:"10:00",endTime:"11:30",address:"Shizuoka Station → Kyoto Station",googleMaps:"https://www.google.com/maps/search/?api=1&query=Shizuoka%20Station",website:"https://global.jr-central.co.jp/en/shinkansen/",bookingLink:"https://smart-ex.jp/en/index.php",status:"planned",tags:"shinkansen,transport"},{id:"qhvx3axeaco",category:"accommodation",name:"Piece Hostel Kyoto",price:"493",joePaid:false,bethPaid:false,notes:"Well-reviewed hostel south of Kyoto Station with strong common spaces.",insight:"Very close to Kyoto Station. Confirm private room vs dorm.",startTime:"15:00",endTime:"11:00",address:"21-1 Higashikujo Higashisannocho, Minami Ward, Kyoto",googleMaps:"https://www.google.com/maps/search/?api=1&query=Piece%20Hostel%20Kyoto",website:"https://kyoto.piecehostel.com/en/",status:"reserved-unpaid",rating:"4.5",tags:"hostel,kyoto,station"},{id:"kyot8act014",category:"activity",name:"Gion District Evening Walk",price:"8",joePaid:false,bethPaid:false,notes:"Historic geisha streets and lanterns.",insight:"Early evening.",startTime:"18:00",endTime:"20:00",address:"Gion, Higashiyama Ward, Kyoto",googleMaps:"https://www.google.com/maps/search/?api=1&query=Gion%20Kyoto",status:"planned",tags:"walk,culture,night"}]},{index:9,city:"KYOTO (NARA DAY TRIP)",entries:[{id:"kyot9trn015",category:"transport",name:"Train Kyoto → Nara",price:"18",joePaid:false,bethPaid:false,notes:"JR Nara line, ~45 minutes.",insight:"Transport leg.",startTime:"08:30",endTime:"09:15",address:"Kyoto Station → Nara Station",googleMaps:"https://www.google.com/maps/search/?api=1&query=Kyoto%20Station",status:"planned",tags:"train,day-trip,nara"},{id:"kyot9act016",category:"activity",name:"Todai-ji Temple & Deer Park",price:"15",joePaid:false,bethPaid:false,notes:"Famous giant Buddha statue.",insight:"Morning.",startTime:"10:00",endTime:"14:00",address:"406-1 Zoshicho, Nara",googleMaps:"https://www.google.com/maps/search/?api=1&query=Todai-ji%20Temple%20Nara",website:"https://www.todaiji.or.jp/en/",status:"planned",tags:"temple,deer,culture,nara"}]},{index:10,city:"KYOTO",entries:[{id:"jvk0lmz5gu",category:"activity",name:"Hozugawa River Boat Tour",price:"65",joePaid:false,bethPaid:false,notes:"",insight:"Morning.",startTime:"09:00",endTime:"12:00",address:"Kameoka, Kyoto",googleMaps:"https://www.google.com/maps/search/?api=1&query=Hozugawa%20Kudari",website:"https://www.hozugawakudari.jp/",status:"planned",tags:"boat,nature,arashiyama"},{id:"kyot10act017",category:"activity",name:"Arashiyama Bamboo Grove",price:"5",joePaid:false,bethPaid:false,notes:"Go early morning to avoid crowds.",insight:"Early morning or late afternoon.",startTime:"13:00",endTime:"14:30",address:"Ukyo Ward, Kyoto",googleMaps:"https://www.google.com/maps/search/?api=1&query=Arashiyama%20Bamboo%20Grove",website:"https://kyoto.travel/en/",status:"planned",tags:"bamboo,nature,walk"}]},{index:11,city:"KYOTO",entries:[{id:"kyot11act018",category:"activity",name:"Fushimi Inari Shrine Hike",price:"5",joePaid:false,bethPaid:false,notes:"Thousands of torii gates. Sunrise visit recommended.",insight:"Sunrise / early morning.",startTime:"07:00",endTime:"10:00",address:"Fushimi Ward, Kyoto",googleMaps:"https://www.google.com/maps/search/?api=1&query=Fushimi%20Inari%20Taisha",website:"https://inari.jp/en/",status:"planned",tags:"shrine,hike,torii"},{id:"kyot11act019",category:"activity",name:"Nishiki Market Food Street",price:"40",joePaid:false,bethPaid:false,notes:"Kyoto street food tasting.",insight:"Lunch.",startTime:"11:30",endTime:"13:30",address:"Nakagyo Ward, Kyoto",googleMaps:"https://www.google.com/maps/search/?api=1&query=Nishiki%20Market%20Kyoto",website:"https://www.kyoto-nishiki.or.jp/en/",status:"planned",tags:"food,market,kyoto"}]},{index:12,city:"KYOTO → OSAKA",entries:[{id:"kyot12trn020",category:"transport",name:"Train Kyoto → Osaka",price:"18",joePaid:false,bethPaid:false,notes:"JR rapid, ~30 minutes.",insight:"Transport leg.",startTime:"10:00",endTime:"10:30",address:"Kyoto Station → Osaka Station",googleMaps:"https://www.google.com/maps/search/?api=1&query=Kyoto%20Station",status:"planned",tags:"train,transport"},{id:"6t95adyx9dn",category:"accommodation",name:"Hotel Monterey Le Frere Osaka",price:"245",joePaid:false,bethPaid:false,notes:"Stylish Umeda/Kita stay. Confirm spa/sauna access.",insight:"Central Umeda location.",startTime:"15:00",endTime:"11:00",address:"1-12-8 Sonezakishinchi, Kita Ward, Osaka",googleMaps:"https://www.google.com/maps/search/?api=1&query=Hotel%20Monterey%20Le%20Frere%20Osaka",website:"https://www.hotelmonterey.co.jp/en/lefrere_osaka/",status:"reserved-unpaid",rating:"4.3",tags:"hotel,osaka,umeda"},{id:"osak12act021",category:"activity",name:"Dotonbori Street Food Night",price:"60",joePaid:false,bethPaid:false,notes:"Try takoyaki and okonomiyaki.",insight:"Evening.",startTime:"18:00",endTime:"21:00",address:"Dotonbori, Chuo Ward, Osaka",googleMaps:"https://www.google.com/maps/search/?api=1&query=Dotonbori%20Osaka",website:"https://osaka-info.jp/en/spot/dotonbori/",status:"planned",tags:"food,nightlife,osaka"}]},{index:13,city:"OSAKA",entries:[{id:"osak13act022",category:"activity",name:"Osaka Castle",price:"15",joePaid:false,bethPaid:false,notes:"Historic castle and park.",insight:"Morning.",startTime:"10:00",endTime:"12:30",address:"1-1 Osakajo, Chuo Ward, Osaka",googleMaps:"https://www.google.com/maps/search/?api=1&query=Osaka%20Castle",website:"https://www.osakacastle.net/english/",status:"planned",tags:"castle,history,landmark"},{id:"osak13act023",category:"activity",name:"Kuromon Ichiba Market Lunch",price:"45",joePaid:false,bethPaid:false,notes:"Best for seafood skewers. Go earlier – vendors wind down afternoon.",insight:"Lunch.",startTime:"13:00",endTime:"14:30",address:"Nipponbashi, Chuo Ward, Osaka",googleMaps:"https://www.google.com/maps/search/?api=1&query=Kuromon%20Ichiba%20Market",website:"https://kuromon.com/en/",status:"planned",tags:"food,market,seafood"}]},{index:14,city:"OSAKA → CAIRNS",entries:[{id:"zpdhqwx1ptf",category:"transport",name:"Flight JQ16 to Cairns",price:"1241",joePaid:true,bethPaid:true,notes:"Jetstar from Kansai to Cairns. Verify terminal in Jetstar app day before.",insight:"Transport leg. Double-check the night before.",startTime:"21:45",endTime:"05:30",address:"Kansai International Airport, Izumisano, Osaka",googleMaps:"https://www.google.com/maps/search/?api=1&query=Kansai%20International%20Airport",website:"https://www.jetstar.com/",bookingLink:"https://www.jetstar.com/",status:"booked",actualPrice:"1241",tags:"flight,international,transport"}]},{index:15,city:"CAIRNS → MELBOURNE",entries:[{id:"cair15act024",category:"activity",name:"Cairns Esplanade Lagoon",price:"0",joePaid:false,bethPaid:false,notes:"Free public lagoon near airport hotels.",insight:"Late morning or afternoon.",startTime:"11:00",endTime:"14:00",address:"52-54 The Esplanade, Cairns City QLD",googleMaps:"https://www.google.com/maps/search/?api=1&query=Cairns%20Esplanade%20Lagoon",website:"https://www.cairns.qld.gov.au/",status:"planned",tags:"lagoon,relax,cairns"},{id:"4he7njemqir",category:"transport",name:"Flight JQ33 to Melbourne",price:"0",joePaid:false,bethPaid:false,notes:"Jetstar domestic return. 11:00 departure, 14:30 arrival.",insight:"Transport leg. Check terminal night before.",startTime:"11:00",endTime:"14:30",address:"Cairns Airport, QLD",googleMaps:"https://www.google.com/maps/search/?api=1&query=Cairns%20Airport",website:"https://www.jetstar.com/",status:"planned",tags:"flight,domestic,transport"}]}]};
+
+// ── LOOKUPS ───────────────────────────────────────────────────
+const CI={activity:"hiking",transport:"train",accommodation:"bed"};
+const CL={activity:"Activity",transport:"Transport",accommodation:"Stay"};
+const SC={booked:"#3d7a4a","reserved-unpaid":"#7e572e",planned:"#5c605a"};
+const SB={booked:"rgba(61,122,74,.12)","reserved-unpaid":"rgba(126,87,46,.12)",planned:"rgba(92,96,90,.10)"};
+const SL={booked:"Booked ✓","reserved-unpaid":"Reserved – Unpaid",planned:"Planned"};
+const allE=()=>T.days.flatMap(d=>d.entries);
+const sum=es=>es.reduce((s,e)=>s+parseFloat(e.price||0),0);
+const cs=s=>s.split("→")[0].split("–")[0].trim().split(" ").slice(0,2).join(" ");
+
+// ── STATE ────────────────────────────────────────────────────
+let activeDay=0;
+
+// ── NAV ──────────────────────────────────────────────────────
+const TITLES={home:"Engawa",itinerary:"Itinerary",day:"Day Detail",finance:"Finances",ai:"AI Builder"};
+function goto(tab){
+  document.querySelectorAll(".page").forEach(p=>{p.classList.remove("active");p.style.display="none";});
+  const pg=document.getElementById("page-"+tab);
+  pg.style.display="block";
+  requestAnimationFrame(()=>pg.classList.add("active"));
+  document.getElementById("page-title").textContent=TITLES[tab]||tab;
+  document.querySelectorAll(".navbtn").forEach(b=>{
+    const on=b.dataset.t===tab;
+    b.style.color=on?"#7e572e":"rgba(47,52,46,.4)";
+    b.style.backgroundColor=on?"#edeee8":"transparent";
+    b.querySelector(".ni").style.fontVariationSettings=on?"'FILL' 1,'wght' 400":"'FILL' 0,'wght' 300";
+  });
+  if(tab==="finance")buildFin();
+  if(tab==="day")buildDay(activeDay);
+}
+function toggleDrawer(){
+  const d=document.getElementById("nav-drawer"),bg=document.getElementById("drawer-bg");
+  const open=!d.classList.contains("-translate-x-full");
+  if(open){d.classList.add("-translate-x-full");bg.classList.add("hidden");}
+  else{d.classList.remove("-translate-x-full");bg.classList.remove("hidden");}
+}
+
+// ── HOME ─────────────────────────────────────────────────────
+function initHome(){
+  const es=allE();
+  const tot=sum(es);
+  const bkd=es.filter(e=>e.status==="booked").length;
+  document.getElementById("stat-cost").textContent="$"+Math.round(tot).toLocaleString();
+  document.getElementById("stat-booked").textContent=bkd;
+
+  // Budget drawer
+  const joe=es.filter(e=>e.joePaid).reduce((s,e)=>s+parseFloat(e.actualPrice||e.price||0),0);
+  const beth=es.filter(e=>e.bethPaid).reduce((s,e)=>s+parseFloat(e.actualPrice||e.price||0),0);
+  document.getElementById("drawer-budget").innerHTML=`
+    <div class="flex justify-between"><span class="text-on-surface-variant">Joe confirmed</span><span class="font-medium">$${Math.round(joe).toLocaleString()}</span></div>
+    <div class="flex justify-between"><span class="text-on-surface-variant">Beth confirmed</span><span class="font-medium">$${Math.round(beth).toLocaleString()}</span></div>
+    <div class="flex justify-between border-t border-outline-variant/20 pt-2 mt-1"><span class="text-on-surface-variant">Total est.</span><span class="font-bold text-secondary">$${Math.round(tot).toLocaleString()}</span></div>
+  `;
+
+  // Pills
+  const pc=document.getElementById("home-pills");
+  pc.innerHTML=T.days.map((d,i)=>`
+    <button onclick="pickDay(${i})" id="hp${i}"
+      class="flex-shrink-0 flex flex-col items-center p-2.5 rounded-xl border border-outline-variant/15 bg-surface-container-lowest hover:border-secondary/40 transition-all cursor-pointer"
+      style="min-width:60px">
+      <span class="font-label text-[9px] font-bold text-secondary uppercase">${i===0?"Dep":i===15?"Arr":"D"+i}</span>
+      <span class="font-headline text-[11px] font-semibold mt-0.5 leading-tight text-center">${cs(d.city)}</span>
+    </button>
+  `).join("");
+  pickDay(0);
+}
+
+function pickDay(i){
+  activeDay=i;
+  document.querySelectorAll("[id^='hp']").forEach((p,idx)=>{
+    p.style.borderColor=idx===i?"#7e572e":"rgba(175,179,172,.15)";
+    p.style.background=idx===i?"rgba(255,220,189,.35)":"#fff";
+  });
+  const day=T.days[i];
+  const card=document.getElementById("home-card");
+  card.style.opacity=".5";card.style.transform="translateY(4px)";
+  setTimeout(()=>{
+    document.getElementById("hc-label").textContent=i===0?"Departure Day":i===15?"Return Day":"Day "+i;
+    document.getElementById("hc-city").textContent=day.city;
+    document.getElementById("hc-meta").innerHTML=`
+      <div class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container rounded-full border border-outline-variant/10">
+        <span class="material-symbols-outlined text-secondary" style="font-size:14px">payments</span>
+        <span class="font-label text-xs font-semibold">$${Math.round(sum(day.entries))} est.</span>
+      </div>
+      <div class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container rounded-full border border-outline-variant/10">
+        <span class="material-symbols-outlined text-secondary" style="font-size:14px">list</span>
+        <span class="font-label text-xs">${day.entries.length} item${day.entries.length!==1?"s":""}</span>
+      </div>
+    `;
+    document.getElementById("hc-grid").innerHTML=day.entries.map(e=>`
+      <div class="group p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-all border border-transparent hover:border-outline-variant/20 cursor-pointer card-press" onclick="openModal('${e.id}')">
+        <div class="flex justify-between items-start mb-3">
+          <span class="font-label text-[10px] text-secondary font-bold tracking-widest uppercase">${e.startTime||""}</span>
+          <span class="material-symbols-outlined text-outline-variant group-hover:text-secondary transition-colors" style="font-size:18px">${CI[e.category]||"place"}</span>
+        </div>
+        <p class="font-body text-sm font-semibold leading-tight mb-2">${e.name}</p>
+        <div class="flex items-center justify-between">
+          <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase" style="color:${SC[e.status]};background:${SB[e.status]}">${SL[e.status]}</span>
+          ${e.price&&e.price!=="0"?`<span class="font-label text-xs text-secondary font-medium">$${e.price}</span>`:`<span class="font-label text-xs text-on-surface-variant">Free</span>`}
+        </div>
+      </div>
+    `).join("");
+    card.style.opacity="1";card.style.transform="translateY(0)";card.style.transition="all .22s ease";
+  },140);
+}
+
+// ── ITINERARY ────────────────────────────────────────────────
+function initItin(){
+  document.getElementById("itin-list").innerHTML=T.days.map((d,i)=>`
+    <section>
+      <div class="flex flex-col md:flex-row gap-5 md:gap-8 items-start">
+        <div class="md:w-28 flex-shrink-0 flex md:flex-col items-center md:items-start gap-3 md:gap-0">
+          <span class="font-headline text-3xl md:text-5xl font-extralight text-outline-variant/40">${String(i).padStart(2,"0")}</span>
+          <p class="font-label text-[10px] uppercase tracking-[0.2em] text-secondary font-bold">${cs(d.city)}</p>
+        </div>
+        <div class="flex-grow w-full">
+          <div class="bg-surface-container-lowest p-5 md:p-7 rounded-xl border border-outline-variant/10 shadow-sm card-press cursor-pointer hover:border-secondary/25 transition-all" onclick="pickDay(${i});goto('day')">
+            <div class="flex flex-wrap justify-between items-start gap-3 mb-5">
+              <div>
+                <h3 class="font-headline text-lg md:text-xl font-semibold">${d.city}</h3>
+                <p class="text-on-surface-variant text-sm mt-0.5">${d.entries.length} item${d.entries.length!==1?"s":""} · $${Math.round(sum(d.entries))} AUD est.</p>
+              </div>
+              <div class="flex flex-wrap gap-1">${[...new Set(d.entries.map(e=>e.status))].map(s=>`<span class="text-[9px] px-2 py-0.5 rounded-full font-bold uppercase" style="color:${SC[s]};background:${SB[s]}">${SL[s]}</span>`).join("")}</div>
+            </div>
+            <div class="space-y-2.5">
+              ${d.entries.map(e=>`
+                <div class="flex items-center gap-3 cursor-pointer" onclick="event.stopPropagation();openModal('${e.id}')">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:${SB[e.status]}">
+                    <span class="material-symbols-outlined" style="font-size:15px;color:${SC[e.status]}">${CI[e.category]||"place"}</span>
+                  </div>
+                  <div class="flex-grow min-w-0 flex items-baseline justify-between gap-2">
+                    <span class="font-medium text-sm truncate">${e.name}</span>
+                    <span class="text-xs text-on-surface-variant flex-shrink-0">${e.startTime||""}</span>
+                  </div>
+                  ${e.price&&e.price!=="0"?`<span class="font-label text-xs text-secondary flex-shrink-0">$${e.price}</span>`:""}
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `).join("");
+}
+
+// ── DAY DETAIL ───────────────────────────────────────────────
+function buildDay(i){
+  // Tab strip
+  document.getElementById("day-tabs").innerHTML=T.days.map((d,idx)=>`
+    <button onclick="switchDay(${idx})" id="dt${idx}"
+      class="flex-shrink-0 px-3 py-1.5 rounded-full font-label text-[10px] uppercase tracking-wider font-bold transition-all"
+      style="${idx===i?"background:#ffdcbd;color:#6f4a22":"background:#edeee8;color:rgba(47,52,46,.5)"}">
+      ${idx===0?"Dep":idx===15?"Arr":"D"+idx}·${cs(d.city).split(" ")[0]}
+    </button>
+  `).join("");
+  renderDay(i);
+}
+
+function switchDay(i){
+  activeDay=i;
+  document.querySelectorAll("[id^='dt']").forEach((b,idx)=>{
+    b.style.background=idx===i?"#ffdcbd":"#edeee8";
+    b.style.color=idx===i?"#6f4a22":"rgba(47,52,46,.5)";
+  });
+  renderDay(i);
+}
+
+function renderDay(i){
+  const day=T.days[i];
+  const dc=document.getElementById("day-content");
+  dc.style.opacity="0";
+  setTimeout(()=>{
+    dc.innerHTML=`
+      <div class="mb-8">
+        <span class="font-label text-secondary uppercase tracking-[0.2em] text-xs mb-2 block">${i===0?"Departure":i===15?"Return":"Day "+i}</span>
+        <h1 class="font-headline text-3xl md:text-4xl font-extralight tracking-tight">${day.city}</h1>
+        <p class="text-on-surface-variant text-sm mt-1">$${Math.round(sum(day.entries))} AUD estimated · ${day.entries.length} item${day.entries.length!==1?"s":""}</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-8">
+          <h2 class="font-headline text-sm font-semibold border-b border-outline-variant/10 pb-3 mb-6 uppercase tracking-widest text-on-surface-variant">Schedule</h2>
+          <div class="relative space-y-8">
+            <div class="absolute left-[11px] top-2 bottom-2 w-px border-l border-dashed border-outline-variant/25"></div>
+            ${day.entries.map(e=>`
+              <div class="itinerary-item relative pl-10" id="di-${e.id}">
+                <button class="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-background border-2 flex items-center justify-center z-10"
+                  style="border-color:${SC[e.status]}"
+                  onclick="toggleDone('di-${e.id}',event)">
+                  <div class="w-1.5 h-1.5 rounded-full" style="background:${SC[e.status]}"></div>
+                </button>
+                <div class="cursor-pointer" onclick="toggleExpand('di-${e.id}')">
+                  <div class="flex flex-wrap items-center gap-2 mb-0.5">
+                    <span class="font-label text-[10px] text-secondary font-bold tracking-widest uppercase">${e.startTime||""}${e.endTime?" – "+e.endTime:""} · ${CL[e.category]||e.category}</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase" style="color:${SC[e.status]};background:${SB[e.status]}">${SL[e.status]}</span>
+                  </div>
+                  <div class="flex items-center gap-2 mb-1">
+                    <h3 class="font-headline text-lg font-normal">${e.name}</h3>
+                    <span class="material-symbols-outlined text-sm text-on-surface-variant exp-chevron">keyboard_arrow_down</span>
+                  </div>
+                  <p class="text-on-surface-variant text-sm leading-relaxed">${e.insight||e.notes||""}</p>
+                  <div class="expandable mt-4 space-y-3">
+                    ${e.notes&&e.notes!==e.insight?`<p class="text-sm text-on-surface-variant border-l-2 border-secondary/20 pl-3 italic">${e.notes}</p>`:""}
+                    ${e.address?`<div class="flex items-start gap-1.5 text-xs text-outline"><span class="material-symbols-outlined flex-shrink-0" style="font-size:14px">location_on</span>${e.address}</div>`:""}
+                    ${e.bestTimeToVisit?`<p class="text-xs text-secondary font-medium flex items-center gap-1"><span class="material-symbols-outlined" style="font-size:13px">schedule</span>${e.bestTimeToVisit}</p>`:""}
+                    <div class="flex flex-wrap gap-2">
+                      ${e.googleMaps?`<a href="${e.googleMaps}" target="_blank" class="flex items-center gap-1 text-xs px-3 py-1.5 bg-surface-container rounded-full hover:bg-surface-container-high transition-colors font-medium"><span class="material-symbols-outlined" style="font-size:13px">map</span>Maps</a>`:""}
+                      ${e.website?`<a href="${e.website}" target="_blank" class="flex items-center gap-1 text-xs px-3 py-1.5 bg-surface-container rounded-full hover:bg-surface-container-high transition-colors font-medium"><span class="material-symbols-outlined" style="font-size:13px">open_in_new</span>Website</a>`:""}
+                      ${e.bookingLink?`<a href="${e.bookingLink}" target="_blank" class="flex items-center gap-1 text-xs px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full hover:opacity-80 font-bold"><span class="material-symbols-outlined" style="font-size:13px">confirmation_number</span>Booking</a>`:""}
+                    </div>
+                    ${e.tags?`<div class="flex flex-wrap gap-1">${e.tags.split(",").map(t=>`<span class="text-[10px] px-2 py-0.5 bg-surface-container-highest rounded font-medium">#${t.trim()}</span>`).join("")}</div>`:""}
+                  </div>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+        <div class="lg:col-span-4 space-y-4">
+          <div class="bg-surface-container rounded-xl p-5 space-y-3">
+            <h4 class="font-label text-[10px] uppercase tracking-widest font-bold">Day Summary</h4>
+            <div><span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest block mb-0.5">Est. Spend</span><p class="text-xl font-light text-secondary">$${Math.round(sum(day.entries))} AUD</p></div>
+            <div class="h-px bg-outline-variant/20"></div>
+            <div><span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest block mb-1">Status</span>
+              <div class="space-y-1">${["booked","reserved-unpaid","planned"].map(s=>{const c=day.entries.filter(e=>e.status===s).length;return c?`<div class="flex justify-between text-xs"><span style="color:${SC[s]}">${SL[s]}</span><span class="font-medium">${c}</span></div>`:"";}).join("")}</div>
+            </div>
+            <div class="h-px bg-outline-variant/20"></div>
+            <div><span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest block mb-0.5">Location</span><p class="text-sm font-medium">${day.city}</p></div>
+          </div>
+          <button class="w-full bg-primary text-on-primary py-3 rounded-xl font-label text-xs uppercase tracking-widest hover:bg-primary-dim active:scale-95 transition-all" onclick="goto('itinerary')">← All Days</button>
+        </div>
+      </div>
+    `;
+    dc.style.opacity="1";dc.style.transition="opacity .2s ease";
+  },120);
+}
+
+function toggleExpand(id){document.getElementById(id)?.classList.toggle("expanded");}
+function toggleDone(id,e){e?.stopPropagation();document.getElementById(id)?.classList.toggle("done");}
+
+// ── MODAL ────────────────────────────────────────────────────
+function openModal(id){
+  const e=allE().find(x=>x.id===id);if(!e)return;
+  document.getElementById("modal-inner").innerHTML=`
+    <div class="p-6 md:p-8">
+      <div class="flex justify-between items-start mb-6">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-[9px] px-2 py-0.5 rounded-full font-bold uppercase" style="color:${SC[e.status]};background:${SB[e.status]}">${SL[e.status]}</span>
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-widest">${CL[e.category]||e.category}</span>
+          </div>
+          <h3 class="font-headline text-xl md:text-2xl font-semibold">${e.name}</h3>
+        </div>
+        <button onclick="closeModal()" class="material-symbols-outlined text-on-surface-variant opacity-40 mt-1 flex-shrink-0">close</button>
+      </div>
+      <div class="space-y-4">
+        ${e.notes?`<p class="text-sm text-on-surface-variant leading-relaxed bg-surface-container-low p-4 rounded-xl">${e.notes}</p>`:""}
+        <div class="grid grid-cols-2 gap-3">
+          ${e.startTime?`<div class="bg-surface-container-low rounded-xl p-3"><p class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Start</p><p class="font-medium text-sm">${e.startTime}</p></div>`:""}
+          ${e.endTime?`<div class="bg-surface-container-low rounded-xl p-3"><p class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">End</p><p class="font-medium text-sm">${e.endTime}</p></div>`:""}
+          ${e.price&&e.price!=="0"?`<div class="bg-surface-container-low rounded-xl p-3"><p class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Est. Cost</p><p class="font-medium text-sm text-secondary">$${e.price} AUD</p></div>`:""}
+          ${e.durationMinutes?`<div class="bg-surface-container-low rounded-xl p-3"><p class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Duration</p><p class="font-medium text-sm">${Math.floor(e.durationMinutes/60)?Math.floor(e.durationMinutes/60)+"h ":""}${e.durationMinutes%60?e.durationMinutes%60+"m":""}</p></div>`:""}
+        </div>
+        ${e.bestTimeToVisit?`<p class="text-sm text-secondary flex items-center gap-1.5 font-medium"><span class="material-symbols-outlined" style="font-size:16px">schedule</span>${e.bestTimeToVisit}</p>`:""}
+        ${e.address?`<div class="flex items-start gap-2 text-sm text-on-surface-variant"><span class="material-symbols-outlined flex-shrink-0" style="font-size:16px">location_on</span><span>${e.address}</span></div>`:""}
+        ${e.insight&&e.insight!==e.notes?`<div class="flex items-start gap-2 text-sm text-secondary/80 italic bg-secondary-container/20 p-3 rounded-xl"><span class="material-symbols-outlined flex-shrink-0" style="font-size:16px;font-variation-settings:'FILL' 1">tips_and_updates</span><span>${e.insight}</span></div>`:""}
+        <div class="flex flex-wrap gap-2 pt-1">
+          ${e.googleMaps?`<a href="${e.googleMaps}" target="_blank" class="flex items-center gap-1.5 text-sm px-4 py-2.5 bg-surface-container rounded-xl hover:bg-surface-container-high font-medium"><span class="material-symbols-outlined" style="font-size:16px">map</span>Open Maps</a>`:""}
+          ${e.website?`<a href="${e.website}" target="_blank" class="flex items-center gap-1.5 text-sm px-4 py-2.5 bg-surface-container rounded-xl hover:bg-surface-container-high font-medium"><span class="material-symbols-outlined" style="font-size:16px">open_in_new</span>Website</a>`:""}
+          ${e.bookingLink?`<a href="${e.bookingLink}" target="_blank" class="flex items-center gap-1.5 text-sm px-4 py-2.5 bg-secondary text-on-secondary rounded-xl hover:opacity-90 font-medium"><span class="material-symbols-outlined" style="font-size:16px">confirmation_number</span>Booking Link</a>`:""}
+        </div>
+        ${e.tags?`<div class="flex flex-wrap gap-1">${e.tags.split(",").map(t=>`<span class="text-[10px] px-2 py-0.5 bg-surface-container-highest rounded font-medium">#${t.trim()}</span>`).join("")}</div>`:""}
+      </div>
+    </div>
+  `;
+  document.getElementById("modal").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function closeModal(){document.getElementById("modal").classList.remove("open");document.body.style.overflow="";}
+
+// ── FINANCE ──────────────────────────────────────────────────
+function buildFin(){
+  const es=allE();
+  const tot=sum(es);
+  const joe=es.filter(e=>e.joePaid).reduce((s,e)=>s+parseFloat(e.actualPrice||e.price||0),0);
+  const beth=es.filter(e=>e.bethPaid).reduce((s,e)=>s+parseFloat(e.actualPrice||e.price||0),0);
+  const paid=joe+beth;
+  const diff=Math.abs(joe-beth);
+  const jp=paid>0?Math.round(joe/paid*100):0;
+  const bp=paid>0?Math.round(beth/paid*100):0;
+
+  document.getElementById("fin-total").textContent="$"+Math.round(tot).toLocaleString();
+  document.getElementById("fin-sub").textContent=`AUD estimated · ${es.length} entries`;
+
+  document.getElementById("fin-contribs").innerHTML=`
+    <div class="space-y-3">
+      <div class="flex justify-between items-end">
+        <div><p class="font-headline text-2xl">Joe Paid</p><p class="text-sm text-outline">Confirmed bookings (flights, teamLab)</p></div>
+        <p class="font-headline text-2xl text-primary">$${Math.round(joe).toLocaleString()}</p>
+      </div>
+      <div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+        <div class="h-full bg-secondary bar rounded-full" style="--w:${jp}%;width:0"></div>
+      </div>
+    </div>
+    <div class="space-y-3">
+      <div class="flex justify-between items-end">
+        <div><p class="font-headline text-2xl">Beth Paid</p><p class="text-sm text-outline">Confirmed shared bookings</p></div>
+        <p class="font-headline text-2xl text-primary">$${Math.round(beth).toLocaleString()}</p>
+      </div>
+      <div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+        <div class="h-full bg-tertiary bar rounded-full" style="--w:${bp}%;width:0"></div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("fin-settle").innerHTML=diff<5?`
+    <div class="w-14 h-14 rounded-full bg-background border border-secondary/10 flex items-center justify-center mx-auto mb-4">
+      <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings:'FILL' 1">check_circle</span>
+    </div>
+    <h4 class="font-headline text-2xl mb-2">All Square</h4>
+    <p class="text-sm text-outline-variant">Confirmed contributions are balanced.</p>
+  `:`
+    <div class="w-14 h-14 rounded-full bg-background border border-secondary/10 flex items-center justify-center mx-auto mb-4">
+      <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings:'FILL' 1">swap_horiz</span>
+    </div>
+    <h4 class="font-headline text-2xl mb-2">$${Math.round(diff)} to settle</h4>
+    <p class="text-sm text-outline-variant">${joe>beth?"Beth owes Joe":"Joe owes Beth"} once all costs are finalised.</p>
+  `;
+
+  const bkd=es.filter(e=>e.status==="booked").length;
+  const rsv=es.filter(e=>e.status==="reserved-unpaid").length;
+  const pln=es.filter(e=>e.status==="planned").length;
+  document.getElementById("fin-status").innerHTML=`
+    <div class="flex justify-between text-sm"><span style="color:#3d7a4a">✓ Booked &amp; paid</span><span class="font-bold">${bkd}</span></div>
+    <div class="flex justify-between text-sm"><span style="color:#7e572e">◐ Reserved – unpaid</span><span class="font-bold">${rsv}</span></div>
+    <div class="flex justify-between text-sm"><span style="color:#5c605a">○ Planned</span><span class="font-bold">${pln}</span></div>
+  `;
+
+  const cats={activity:0,transport:0,accommodation:0};
+  es.forEach(e=>cats[e.category]=(cats[e.category]||0)+parseFloat(e.price||0));
+  document.getElementById("fin-cats").innerHTML=Object.entries(cats).map(([k,v])=>`
+    <div class="bg-surface-container-low rounded-xl p-5">
+      <span class="material-symbols-outlined text-secondary mb-2 block">${CI[k]}</span>
+      <p class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">${CL[k]}</p>
+      <p class="font-headline text-2xl font-light">$${Math.round(v).toLocaleString()}</p>
+    </div>
+  `).join("");
+
+  document.getElementById("fin-ledger").innerHTML=T.days.map((d,i)=>{
+    const c=sum(d.entries);if(c===0)return"";
+    return`<div class="group cursor-pointer flex items-center justify-between py-5 border-b border-outline-variant/10 hover:bg-surface-container-low transition-colors px-4 -mx-4 rounded-lg" onclick="pickDay(${i});goto('day')">
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 flex items-center justify-center bg-surface-container-highest rounded-full flex-shrink-0">
+          <span class="font-headline text-sm font-bold text-outline">${i===0?"D":i===15?"R":"D"+i}</span>
+        </div>
+        <div><p class="font-headline text-base">${d.city}</p><p class="text-xs text-outline-variant">${d.entries.length} item${d.entries.length!==1?"s":""}</p></div>
+      </div>
+      <div class="text-right"><p class="font-headline text-base">$${Math.round(c)}</p><p class="text-xs text-outline-variant">AUD est.</p></div>
+    </div>`;
+  }).join("");
+
+  requestAnimationFrame(()=>document.querySelectorAll(".bar").forEach(b=>{b.style.animation="none";requestAnimationFrame(()=>b.style.animation="");}));
+}
+
+// ── CSV ──────────────────────────────────────────────────────
+function dlCSV(){
+  const rows=["Day,City,Category,Name,Status,Price AUD,Joe Paid,Beth Paid,Start,End,Notes"];
+  T.days.forEach((d,i)=>d.entries.forEach(e=>rows.push([i,`"${d.city}"`,e.category,`"${e.name}"`,e.status,e.price||0,e.joePaid?"Yes":"No",e.bethPaid?"Yes":"No",e.startTime||"",e.endTime||"",`"${(e.notes||"").replace(/"/g,"'")}"`].join(","))));
+  const a=Object.assign(document.createElement("a"),{href:URL.createObjectURL(new Blob([rows.join("\n")],{type:"text/csv"})),download:"joe-beth-japan-2026.csv"});
+  a.click();showToast("CSV downloaded!");
+}
+
+// ── AI ───────────────────────────────────────────────────────
+const PROMPTS={
+  fill:`Here is my Japan 2026 trip JSON: [PASTE JSON]\n\nI'm travelling: Melbourne → Tokyo (Days 1–4) → Lake Kawaguchi (Days 5–6) → Shizuoka (Days 7–8) → Kyoto (Days 9–12) → Osaka (Days 13–14) → Cairns → Melbourne.\n\nPlease suggest 2–3 culturally relevant activities for each day that has gaps or only planned entries. Focus on experiences that complement what's already booked. Return the updated JSON in the same format.`,
+  costs:`Here is my Japan 2026 trip JSON: [PASTE JSON]\n\nPlease fill in realistic 2026 AUD prices for all entries where price is 0 or missing. Use JPY→AUD conversion of ~0.0099. Include entry fees, meals, transport costs. Return the updated JSON with price fields filled.`,
+  transport:`Here is my Japan 2026 trip JSON: [PASTE JSON]\n\nPlease add or verify transport entries between each city change. For each leg include: service name, departure station, arrival station, duration, cost in AUD, and booking link if available. Return the updated JSON with transport entries in place.`,
+  custom:""
+};
+function cpJSON(){
+  navigator.clipboard.writeText(JSON.stringify(T,null,2)).then(()=>showToast("Trip JSON copied!")).catch(()=>showToast("Copy failed."));
+}
+function cpPrompt(btn,type){
+  let text=PROMPTS[type];
+  if(type==="custom"){
+    const v=document.getElementById("cpt").value.trim();
+    text=v?`Joe & Beth Japan 2026 · 16-day trip covering Tokyo, Lake Kawaguchi, Shizuoka, Kyoto, Osaka.\n\nRequest: ${v}`:"Please enter your custom prompt first.";
+  }
+  navigator.clipboard.writeText(text).then(()=>{
+    const ic=btn.querySelector(".material-symbols-outlined");
+    const orig=ic.textContent;
+    ic.textContent="check";btn.style.background="#fecbcb";btn.style.color="#654142";
+    setTimeout(()=>{ic.textContent=orig;btn.style.background="";btn.style.color="";},2000);
+  }).catch(()=>showToast("Copy failed."));
+}
+
+// ── TOAST ────────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById("toast");t.textContent=msg;t.style.opacity="1";
+  setTimeout(()=>t.style.opacity="0",2500);
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+initHome();
+initItin();
+goto("home");
+</script>
+</body>
+</html>

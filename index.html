@@ -180,11 +180,17 @@
       <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div class="max-w-md">
           <p class="font-label text-sm uppercase tracking-widest text-secondary mb-2">How it works</p>
-          <p class="text-on-surface-variant text-sm leading-relaxed">Click Export to copy your live trip JSON, then paste it into any AI alongside one of the prompts below.</p>
+          <p class="text-on-surface-variant text-sm leading-relaxed">Click <strong class="text-on-surface font-semibold">Export</strong> to copy your trip JSON, paste it into an AI with a prompt below, then click <strong class="text-on-surface font-semibold">Import</strong> to load the updated JSON back into the app.</p>
         </div>
-        <button class="bg-primary hover:bg-primary-dim text-on-primary px-5 py-3 rounded-xl text-sm font-medium flex items-center gap-2 active:scale-95 transition-all flex-shrink-0" onclick="cpJSON()">
-          <span class="material-symbols-outlined text-sm">upload_file</span>Export Trip JSON
-        </button>
+        <div class="flex flex-wrap gap-3">
+          <button class="bg-primary hover:bg-primary-dim text-on-primary px-5 py-3 rounded-xl text-sm font-medium flex items-center gap-2 active:scale-95 transition-all" onclick="cpJSON()">
+            <span class="material-symbols-outlined text-sm">upload_file</span>Export Trip JSON
+          </button>
+          <button class="bg-surface-container border border-outline-variant/30 hover:bg-surface-container-high text-on-surface px-5 py-3 rounded-xl text-sm font-medium flex items-center gap-2 active:scale-95 transition-all" onclick="document.getElementById('json-file-input').click()">
+            <span class="material-symbols-outlined text-sm">download</span>Import Updated JSON
+          </button>
+          <input type="file" id="json-file-input" accept=".json,application/json" class="hidden" onchange="importJSON(event)"/>
+        </div>
       </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -623,6 +629,44 @@ const PROMPTS={
 };
 function cpJSON(){
   navigator.clipboard.writeText(JSON.stringify(T,null,2)).then(()=>showToast("Trip JSON copied!")).catch(()=>showToast("Copy failed."));
+}
+
+function importJSON(event){
+  const file = event.target.files[0];
+  if(!file){ return; }
+  if(!file.name.endsWith('.json') && file.type !== 'application/json'){
+    showToast("Please select a .json file.");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      const parsed = JSON.parse(e.target.result);
+      // Validate it has the expected shape
+      if(!parsed.days || !Array.isArray(parsed.days)){
+        showToast("Invalid format — JSON must have a 'days' array.");
+        return;
+      }
+      // Merge into live data
+      Object.assign(T, parsed);
+      // Rebuild all pages with new data
+      initHome();
+      initItin();
+      // Reset day detail if visible
+      if(document.getElementById('page-day').classList.contains('active')){
+        buildDay(activeDay < T.days.length ? activeDay : 0);
+      }
+      // Show success
+      showToast(`✓ Imported ${T.days.length} days successfully!`);
+      // Reset file input so same file can be re-imported
+      event.target.value = '';
+    } catch(err) {
+      showToast("Failed to parse JSON — check the file format.");
+      console.error(err);
+    }
+  };
+  reader.onerror = function(){ showToast("Could not read file."); };
+  reader.readAsText(file);
 }
 function cpPrompt(btn,type){
   let text=PROMPTS[type];
